@@ -1,7 +1,11 @@
 import Head from "next/head"
+import { getFeaturedEvents } from "../dummy-data"
+import EventsList from "../components/events/EventsList/EventsList"
 import styles from "../styles/Home.module.css"
 
 export default function Home() {
+	const featuredEvents = getFeaturedEvents()
+
 	return (
 		<div className={styles.container}>
 			<Head>
@@ -13,10 +17,9 @@ export default function Home() {
 			</header>
 
 			<main className={styles.main}>
-				<ul className={styles.grid}>
-					<li className={styles.card}>Event 1</li>
-					<li className={styles.card}>Event 2</li>
-				</ul>
+				<div className={styles.grid}>
+					<EventsList events={featuredEvents} />
+				</div>
 			</main>
 
 			<footer>
