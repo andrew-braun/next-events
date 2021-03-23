@@ -1,11 +1,11 @@
 import EventListItem from "../EventListItem/EventListItem"
-import "./events-list.module.css"
+import styles from "./events-list.module.css"
 
 function EventsList({ events }) {
 	const eventsList = events.map((event) => {
-		return <EventListItem item={event} />
+		return <EventListItem item={event} key={event.id} />
 	})
-	return <ul>{eventsList}</ul>
+	return <ul className={styles.list}>{eventsList}</ul>
 }
 
 export default EventsList
