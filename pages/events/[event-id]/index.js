@@ -4,6 +4,8 @@ import { getEventById } from "../../../dummy-data"
 import EventSummary from "../../../components/events/event-detail/EventSummary/event-summary"
 import EventLogistics from "../../../components/events/event-detail/EventLogistics/event-logistics"
 import EventContent from "../../../components/events/event-detail/EventContent/event-content"
+import ErrorAlert from "../../../components/ui/ErrorAlert/ErrorAlert"
+import Button from "../../../components/ui/Button/Button"
 import styles from "./single-event.module.css"
 
 function SingleEventPage() {
@@ -14,7 +16,14 @@ function SingleEventPage() {
 	const event = getEventById(eventId)
 
 	if (!event) {
-		return <p>Event not found</p>
+		return (
+			<Fragment>
+				<ErrorAlert>Event not found!</ErrorAlert>
+				<div className="center">
+					<Button link="/events">Back to All Events</Button>
+				</div>
+			</Fragment>
+		)
 	}
 
 	const { title, description, location, date, image } = event
