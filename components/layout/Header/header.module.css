@@ -24,6 +24,10 @@
 	color: #94fdfd;
 }
 
+.navMenu {
+	list-style: none;
+}
+
 .navigation a {
 	text-decoration: none;
 	color: #74dacc;

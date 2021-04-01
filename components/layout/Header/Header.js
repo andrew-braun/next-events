@@ -8,7 +8,7 @@ function Header() {
 				<Link href="/">Next Events</Link>
 			</div>
 			<nav className={styles.navigation}>
-				<ul>
+				<ul className={styles.navMenu}>
 					<li>
 						<Link href="/events">All Events</Link>
 					</li>
