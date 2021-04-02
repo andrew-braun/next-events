@@ -1,12 +1,32 @@
 import { useRouter } from "next/router"
-import { Fragment } from "react"
-import { getFilteredEvents } from "../../../dummy-data"
+import { Fragment, useEffect, useState } from "react"
+import useSWR from "swr"
 import EventsList from "../../../components/events/EventsList/EventsList"
 import ResultsTitle from "../../../components/events/ResultsTitle/ResultsTitle"
 import ErrorAlert from "../../../components/ui/ErrorAlert/ErrorAlert"
 import Button from "../../../components/ui/Button/Button"
 
 function FilteredEventsPage(props) {
+	const [eventsList, setEventsList] = useState([])
+
+	const { data, error } = useSWR(
+		"https://next-js-course-1-default-rtdb.europe-west1.firebasedatabase.app/events.json"
+	)
+
+	useEffect(() => {
+		if (data) {
+			const eventsArray = []
+
+			for (let key in data) {
+				const event = data[key]
+				eventsArray.push(event)
+			}
+
+			console.log(eventsArray)
+			setEventsList(eventsArray)
+		}
+	}, [data])
+
 	// Get filter from dates entered in URL slug
 	const router = useRouter()
 	const filterData = router.query.slug
@@ -39,7 +59,13 @@ function FilteredEventsPage(props) {
 
 	// Fetch filtered events using filter function
 	const dateObject = { year: year, month: month }
-	const filteredEvents = getFilteredEvents(dateObject)
+	const filteredEvents = eventsList.filter((event) => {
+		const eventDate = new Date(event.date)
+		console.log(eventDate.getFullYear())
+		return (
+			eventDate.getFullYear() === year && eventDate.getMonth() === month - 1
+		)
+	})
 
 	// If no events are returned, return error
 	if (!filteredEvents || filteredEvents.length === 0) {
@@ -52,7 +78,8 @@ function FilteredEventsPage(props) {
 			</Fragment>
 		)
 	}
-	const date = new Date(year, month)
+	const date = new Date(year, month - 1)
+
 	return (
 		<Fragment>
 			<ResultsTitle date={date} />
@@ -60,5 +87,18 @@ function FilteredEventsPage(props) {
 		</Fragment>
 	)
 }
+
+// export async function getStaticProps() {
+// 	const response = await fetch(
+// 		"https://next-js-course-1-default-rtdb.europe-west1.firebasedatabase.app/events.json"
+// 	)
+
+// 	const data = await response.json()
+
+// 	for (let key in data) {
+// 		salesArray.push(data[key])
+// 	}
+// 	return { props: { events: eventsArray }, revalidate: 60 }
+// }
 
 export default FilteredEventsPage

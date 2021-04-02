@@ -81,8 +81,6 @@ export async function getStaticPaths() {
 		}
 	}
 
-	console.log(staticPaths)
-
 	const test = [{ params: { eventId: "e1" } }, { params: { eventId: "e2" } }]
 
 	return {
