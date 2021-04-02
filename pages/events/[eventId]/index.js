@@ -9,22 +9,18 @@ import Button from "../../../components/ui/Button/Button"
 import styles from "./single-event.module.css"
 
 function SingleEventPage(props) {
-	const event = props.event
+	const event = props.loadedEvent
 
 	if (!event) {
 		return (
 			<Fragment>
-				<ErrorAlert>Event not found!</ErrorAlert>
-				<div className="center">
-					<Button link="/events">Back to All Events</Button>
-				</div>
+				<ErrorAlert>Loading...</ErrorAlert>
 			</Fragment>
 		)
 	}
 
 	const { title, description, location, date, image } = event
 
-	console.log(location)
 	return (
 		<Fragment>
 			<EventSummary title={title} />
@@ -55,7 +51,7 @@ export async function getStaticProps(context) {
 	const eventId = params.eventId
 
 	const data = await fetchData()
-	const event = Object.entries(data).find((event) => event.id === eventId)
+	const event = await data[eventId]
 
 	if (!event) {
 		return { notFound: true }
@@ -71,35 +67,26 @@ export async function getStaticProps(context) {
 export async function getStaticPaths() {
 	const data = await fetchData()
 
-	const staticPaths = Object.entries(data).reduce((events, entry) => {
+	// console.log(Object.entries(data))
+	const staticPaths = []
+
+	for (let key in data) {
+		const entry = data[key]
 		if (entry.isFeatured) {
-			return {
+			staticPaths.push({
 				params: {
-					eventId: `/events/${entry.id}`,
+					eventId: key,
 				},
-			}
+			})
 		}
-		return events
-	})
+	}
 
 	console.log(staticPaths)
 
-	// for (let key in data) {
-	// 	console.log(data[key])
-	// 	// const entry = data[key]
-	// 	// if (entry.isFeatured) {
-	// 	// 	staticPaths.push({
-	// 	// 		params: {
-	// 	// 			eventId: entry.id,
-	// 	// 		},
-	// 	// 	})
-	// 	// }
-	// }
-
-	const test = [{ params: { eventId: "e2" } }]
+	const test = [{ params: { eventId: "e1" } }, { params: { eventId: "e2" } }]
 
 	return {
-		paths: test,
+		paths: staticPaths,
 		fallback: true,
 	}
 }
