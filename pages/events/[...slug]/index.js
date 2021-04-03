@@ -107,7 +107,7 @@ export async function getServerSideProps() {
 		eventsArray.push(event)
 	}
 
-	return { params: { events: eventsArray } }
+	return { props: { events: eventsArray } }
 }
 
 export default FilteredEventsPage
