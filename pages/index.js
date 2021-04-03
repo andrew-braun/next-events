@@ -1,5 +1,6 @@
 import Head from "next/head"
 import EventsList from "../components/events/EventsList/EventsList"
+import { fetchEventsData } from "../helpers/apiUtils"
 import styles from "./Home.module.css"
 
 export default function Home(props) {
@@ -12,9 +13,6 @@ export default function Home(props) {
 				<title>Next Events</title>
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<header className={styles.header}>
-				<h1 className={styles.title}>Next Events</h1>
-			</header>
 
 			<main className={styles.main}>
 				<div className={styles.mainFeed}>
@@ -36,10 +34,7 @@ export default function Home(props) {
 }
 
 export async function getStaticProps() {
-	const response = await fetch(
-		`https://next-js-course-1-default-rtdb.europe-west1.firebasedatabase.app/events.json?orderBy="isFeatured"&equalTo=true&print=pretty`
-	)
-	const data = await response.json()
+	const data = await fetchEventsData("featured")
 
 	const eventsArray = []
 	for (let key in data) {
@@ -47,6 +42,6 @@ export async function getStaticProps() {
 		event.id = key
 		eventsArray.push(event)
 	}
-	console.log(eventsArray)
-	return { props: { events: eventsArray }, revalidate: 30 }
+
+	return { props: { events: eventsArray }, revalidate: 1800 }
 }

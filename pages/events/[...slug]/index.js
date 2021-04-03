@@ -1,13 +1,16 @@
 import { useRouter } from "next/router"
 import { Fragment, useEffect, useState } from "react"
 import useSWR from "swr"
+import { fetchEventsData } from "../../../helpers/apiUtils"
 import EventsList from "../../../components/events/EventsList/EventsList"
 import ResultsTitle from "../../../components/events/ResultsTitle/ResultsTitle"
 import ErrorAlert from "../../../components/ui/ErrorAlert/ErrorAlert"
 import Button from "../../../components/ui/Button/Button"
 
 function FilteredEventsPage(props) {
-	const [eventsList, setEventsList] = useState([])
+	const { events } = props
+	const [eventsList, setEventsList] = useState(events)
+	const [filteredEvents, setFilteredEvents] = useState([])
 
 	const { data, error } = useSWR(
 		"https://next-js-course-1-default-rtdb.europe-west1.firebasedatabase.app/events.json"
@@ -59,13 +62,19 @@ function FilteredEventsPage(props) {
 
 	// Fetch filtered events using filter function
 	const dateObject = { year: year, month: month }
-	const filteredEvents = eventsList.filter((event) => {
-		const eventDate = new Date(event.date)
-		console.log(eventDate.getFullYear())
-		return (
-			eventDate.getFullYear() === year && eventDate.getMonth() === month - 1
-		)
-	})
+
+	useEffect(() => {
+		if (eventsList) {
+			const filtered = eventsList.filter((event) => {
+				const eventDate = new Date(event.date)
+				console.log(eventDate.getFullYear())
+				return (
+					eventDate.getFullYear() === year && eventDate.getMonth() === month - 1
+				)
+			})
+			setFilteredEvents(filtered)
+		}
+	}, [eventsList])
 
 	// If no events are returned, return error
 	if (!filteredEvents || filteredEvents.length === 0) {
@@ -88,17 +97,17 @@ function FilteredEventsPage(props) {
 	)
 }
 
-// export async function getStaticProps() {
-// 	const response = await fetch(
-// 		"https://next-js-course-1-default-rtdb.europe-west1.firebasedatabase.app/events.json"
-// 	)
+export async function getServerSideProps() {
+	const data = await fetchEventsData("featured")
 
-// 	const data = await response.json()
+	const eventsArray = []
+	for (let key in data) {
+		const event = data[key]
+		event.id = key
+		eventsArray.push(event)
+	}
 
-// 	for (let key in data) {
-// 		salesArray.push(data[key])
-// 	}
-// 	return { props: { events: eventsArray }, revalidate: 60 }
-// }
+	return { params: { events: eventsArray } }
+}
 
 export default FilteredEventsPage
