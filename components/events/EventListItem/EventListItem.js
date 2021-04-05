@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Button from "../../ui/Button/Button"
 import DateIcon from "../../icons/date-icon"
 import AddressIcon from "../../icons/address-icon"
@@ -16,7 +17,9 @@ function EventListItem({ item }) {
 
 	return (
 		<li className={styles.item}>
-			<img src={`/${image}`} alt={title} />
+			<div className={styles.imageContainer}>
+				<Image src={`/${image}`} alt={title} width={250} height={100} />
+			</div>
 			<div className={styles.content}>
 				<div className={styles.summary}>
 					<h2>{title}</h2>
