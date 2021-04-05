@@ -1,5 +1,6 @@
 import { Fragment } from "react"
 import { fetchEventsData } from "../../../helpers/apiUtils"
+import HeadBlock from "../../../components/HeadBlock/HeadBlock"
 import EventSummary from "../../../components/events/event-detail/EventSummary/event-summary"
 import EventLogistics from "../../../components/events/event-detail/EventLogistics/event-logistics"
 import EventContent from "../../../components/events/event-detail/EventContent/event-content"
@@ -21,6 +22,7 @@ function SingleEventPage(props) {
 
 	return (
 		<Fragment>
+			<HeadBlock title={title} description={description} />
 			<EventSummary title={title} />
 			<EventLogistics
 				address={location}

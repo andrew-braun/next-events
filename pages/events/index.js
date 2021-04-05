@@ -1,6 +1,7 @@
 import { Fragment } from "react"
 import { useRouter } from "next/router"
 import { fetchEventsData } from "../../helpers/apiUtils"
+import HeadBlock from "../../components/HeadBlock/HeadBlock"
 import EventsList from "../../components/events/EventsList/EventsList"
 import EventsSearch from "../../components/events/EventsSearch/EventsSearch"
 import styles from "./events.module.css"
@@ -18,6 +19,10 @@ function EventsPage(props) {
 
 	return (
 		<Fragment>
+			<HeadBlock
+				title="Next Events"
+				description="Amazing events, meetups , and networking opportunities for developers."
+			></HeadBlock>
 			<EventsSearch onSearch={handleFindEvents} />
 			<EventsList events={events} />
 		</Fragment>

@@ -2,6 +2,7 @@ import { useRouter } from "next/router"
 import { Fragment, useEffect, useState } from "react"
 import useSWR from "swr"
 import { fetchEventsData } from "../../../helpers/apiUtils"
+import HeadBlock from "../../../components/HeadBlock/HeadBlock"
 import EventsList from "../../../components/events/EventsList/EventsList"
 import ResultsTitle from "../../../components/events/ResultsTitle/ResultsTitle"
 import ErrorAlert from "../../../components/ui/ErrorAlert/ErrorAlert"
@@ -52,6 +53,7 @@ function FilteredEventsPage(props) {
 	) {
 		return (
 			<Fragment>
+				<HeadBlock title="Error" description="Something went wrong!" />
 				<ErrorAlert>Invalid date values--please adjust them.</ErrorAlert>
 				<div className="center">
 					<Button link="/events">Back to All Events</Button>
@@ -80,6 +82,10 @@ function FilteredEventsPage(props) {
 	if (!filteredEvents || filteredEvents.length === 0) {
 		return (
 			<Fragment>
+				<HeadBlock
+					title="No Events Found"
+					description="No events found for those dates!"
+				/>
 				<ErrorAlert>No events found for those dates!</ErrorAlert>
 				<div className="center">
 					<Button link="/events">Back to All Events</Button>
@@ -91,6 +97,10 @@ function FilteredEventsPage(props) {
 
 	return (
 		<Fragment>
+			<HeadBlock
+				title={`Next Events - ${month}/${year}`}
+				description={`All events for ${month}/${year}`}
+			/>
 			<ResultsTitle date={date} />
 			<EventsList events={filteredEvents} />
 		</Fragment>

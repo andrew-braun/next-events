@@ -1,4 +1,4 @@
-import Head from "next/head"
+import HeadBlock from "../components/HeadBlock/HeadBlock"
 import EventsList from "../components/events/EventsList/EventsList"
 import { fetchEventsData } from "../helpers/apiUtils"
 import styles from "./Home.module.css"
@@ -9,10 +9,10 @@ export default function Home(props) {
 
 	return (
 		<div className={styles.container}>
-			<Head>
-				<title>Next Events</title>
-				<link rel="icon" href="/favicon.ico" />
-			</Head>
+			<HeadBlock
+				title="Next Events"
+				description="Amazing events, meetups , and networking opportunities for developers."
+			></HeadBlock>
 
 			<main className={styles.main}>
 				<div className={styles.mainFeed}>
